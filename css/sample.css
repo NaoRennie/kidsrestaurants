@@ -1,0 +1,175 @@
+
+body{
+    font-family:'HanziPen TC','Verdana',sans-serif;
+    background-color: white;
+}
+.header_site{
+display: flex;
+justify-content: center;
+align-items: center;
+height: 500px;
+/* background: url(img/kidsmenu3.jpg) no-repeat bottom center; */
+background-size: cover; 
+}
+
+.header_title{
+    font-size: 3.0rem;
+    line-height: 1;
+    text-align: center;
+    color: 	#FF97C2;
+    z-index: 1s;
+}
+
+.slideshow{
+    margin-top: 40;
+    overflow: hidden;
+    position: relative;
+    min-width: 960px;
+    height: 465px;
+}
+
+.slideshow img {
+    display: none;
+    position: absolute;
+    left: 50%;
+    margin-left: -800px;
+}
+
+.no-js .slideshow img:first-child {
+    display: flex;
+
+}
+.serch-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; 
+    width: 50%;
+    margin: 0 auto;
+}
+
+.search{
+    width: 960px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 100px;
+    
+}
+
+
+.current_location_search{
+    margin-top: 50px;
+    display: inline-block;
+    text-decoration: none;
+    background: #87befd;
+    color: #FFF;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    box-shadow: 0px 0px 0px 5px #87befd;
+    border: dashed 1px #FFF;
+    transition: .4s;
+}
+
+.current_location_search:hover{
+    background: #668ad8;
+     box-shadow: 0px 0px 0px 5px #668ad8;
+}
+
+/* .choice {
+    background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
+    height: 29px;
+    overflow: hidden;
+    width: 240px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    background-color: #eec111;
+ }
+
+ .choice select {
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    height: 29px;
+    padding: 5px; /* If you add too much padding here, the options won't show in IE */
+    /* width: 268px;
+    color: #000;
+ } */ 
+
+  /* select boxの装飾 */
+
+ select{
+    outline:none;
+    text-indent: 0.01px;
+    text-overflow: '';
+    background: none transparent;
+    vertical-align: middle;
+    font-size: inherit;
+    color: inherit;
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    width:100px;
+}
+select option{
+    font-family: 'HanziPen TC','Verdana',sans-serif;
+  background-color: white;
+  color: #333;
+}
+select::-ms-expand {
+  display: none;
+}
+select:-moz-focusring { 
+  color: transparent; 
+  text-shadow: 0 0 0 #828c9a;
+}
+
+ .choice {
+    position:relative;
+    font-family:'HanziPen TC','Verdana',sans-serif;
+}
+.choice:before {
+    z-index: 1;
+    position: absolute;
+    right: 15px;
+    top: 0;
+    content: "\f123";
+    font-family: 'HanziPen TC','Verdana',sans-serif;
+    line-height: 43px;
+    color: #7F878C;
+    pointer-events: none;
+}
+
+.textbox {
+    border: solid black 1px;
+    width: 80%;
+    margin-left: 80px;
+    margin-bottom: 10px;
+   border-radius: 20px;
+   background-color: white;
+}
+#output {
+    margin-top: 50px;
+    overflow:auto; 
+    height: 500px; 
+    border: solid black 1px;
+    width: 100%;
+    background-color: white; 
+}
+.pr {
+    padding-left: 100px;
+    padding-right: 100px;
+    color: 	#FF9872;
+}
+
+.result_title{
+    font-size: 25px;
+}
+#station{
+    margin-top: 50px;
+}
+

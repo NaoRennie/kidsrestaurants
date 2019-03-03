@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<title>レストラン検索</title>
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/sample.css">
+</head>
+<body>
+  <header >
+    <div class="slideshow header_site">
+        <img src="img/kidsmenu1.jpg" alt="kidsmenuの写真" width="1600px" height="500px">
+        <img src="img/kidsmenu2.jpg" alt="kidsmenuの写真" width="1600px" height="500px">
+        <img src="img/kidsmenu3.jpg" alt="kidsmenuの写真" width="1600px" height="500px">
+        <img src="img/kidsmenu4.jpg" alt="kidsmenuの写真" width="1600px" height="500px">
+    </div>
+    <h2 class="header_title">キッズメニューのあるレストラン検索</h2>
+  </header>
+
+  <section class="search">
+    <ul class="serch-btn">
+      <li>
+        <div class = "search_location">
+            <p>現在地から検索</p>
+            <a href="#" type = "button" value="検索" class="current_location_search">SEARCH</a>
+        </div>
+      </li>
+      <li>
+        <div class = "choice">
+          <p>駅から検索</p>
+          <select id = "station" class="station-select" placeholder="station">
+            <option value="0"></option>
+            <option id = "shinjuku" value="1">新宿駅</option>
+            <option id = "yoyogi" value="4">代々木駅</option>
+            <option id = "harajuku" value="5">原宿駅</option>
+            <option id = "shibuya" value="2">渋谷駅</option>
+            <option id = "ebisu" value="3">恵比寿駅</option>
+            <option id = "meguro" value="6">目黒駅</option>
+            <option id = "gotanda" value="7">五反田駅</option>
+            <option id = "osaki" value="8">大崎駅</option>
+            <option id = "shinagawa" value="9">品川駅</option>
+            <option id = "tamachi" value="10">田町駅</option>
+            <option id = "hamamatsu" value="11">浜松駅</option>
+            <option id = "shinbashi" value="12">新橋駅</option>
+            <option id = "yurakucho" value="13">有楽町駅</option>
+            <option id = "tokyo" value="14">東京駅</option>
+            <option id = "kanda" value="15">神田駅</option>
+            <option id = "akihabara" value="16">秋葉原駅</option>
+            <option id = "okachimachi" value="17">御徒町駅</option>
+            <option id = "ueno" value="18">上野駅</option>
+            <option id = "uguisudani" value="19">鶯谷駅</option>
+            <option id = "nippori" value="20">日暮里駅</option>
+            <option id = "nishinippori" value="21">西日暮里駅</option>
+            <option id = "tabata" value="22">田端駅</option>
+            <option id = "komagome" value="23">駒込駅</option>
+            <option id = "sugamo" value="24">巣鴨駅</option>
+            <option id = "otsuka" value="25">大塚駅</option>
+            <option id = "ikebukuro" value="26">池袋駅</option>
+            <option id = "mejiro" value="27">目白駅</option>
+            <option id = "takadanobaba" value="28">高田馬場駅</option>
+            <option id = "shinokubo" value="29">新大久保駅</option>
+          </select>
+        </div>
+      </li>
+    </ul>
+    <div id ="output" placeholder="ここに結果が表示されます">ここに結果が表示されます</div>
+  </section>
+
+
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script>
+  $(function (){
+    $('.slideshow').each(function(){
+      var $slides = $(this).find('img'),
+          slideCount = $slides.length,
+          currentIndex = 0;
+      $slides.eq(currentIndex).fadeIn();
+      setInterval(showNextSlide, 3000);
+    
+      function showNextSlide(){
+          var nextIndex = (currentIndex + 1) % slideCount;
+          $slides.eq(currentIndex).fadeOut();
+          $slides.eq(nextIndex).fadeIn();
+          currentIndex = nextIndex;
+      }
+    })
+  })
+   
+  function mapsInit(position){
+    let lat = position.coords.latitude;
+    let lon = position.coords.longitude; 
+    func(lat,lon);
+  }
+
+
+  function mapsError(error){
+    let msg = "";
+    if(error.code == 1){
+        msg = "許可されませんでした";
+    }
+    if(error.code == 2){
+        msg = "取得できませんでした";
+    }
+    if(error.code == 3){
+        msg = "TIMEOUT";
+    }
+    alert(msg);
+  }
+
+  const set = {
+      enableHightAccuracy: true,
+      timeout: 10000,
+      maximumAge: 20000
+  }
+  function initMap(){
+      navigator.geolocation.getCurrentPosition(mapsInit, mapsError, set);//一番最後に実行しないといけない。３つの変数をいつも作る。これはいつも変わらない
+  }
+        
+  function func(lat,lon){
+    let url = 'https://api.gnavi.co.jp/RestSearchAPI/20150630/?callback=?';
+    let params = {
+        keyid: '',
+        format: 'json',
+        latitude: lat,
+        longitude: lon,
+        range: 2,
+        kids_menu: 1
+     }   
+        
+    let showResult = function(result){
+      if ( result.total_hit_count > 0 ) {
+        let res = '';
+        alert( result.total_hit_count + '件の結果が見つかりました。\n' );
+        for ( var i in result.rest ){
+          res += '<div class="textbox"><dl>';
+            res += '<dt class="result_title">'+ result.rest[i].name + ' '+ '</dt>';
+            res += '<dd class="pr">'+ result.rest[i].pr.pr_short + ' '+ '</dd>';
+            res += '<dd>'+ result.rest[i].address + ' '+ '</dd>';
+            res += '<dd>'+ result.rest[i].tel + ' '+ '</dd>';
+            res += '<dd><a href="'+ result.rest[i].url + ' '+ '" target="_blank">' + '詳細はこちら' + '</a></dd>';
+            res += '<dd>'+ result.rest[i].access.line + ' '+ result.rest[i].access.station + ' '+ result.rest[i].access.walk + '分\n'+ '</dd>';
+            res += '<dd><img src="' + result.rest[i].image_url.shop_image1 + ''+ '" alt=""></dd></div>';
+            $("#output").append(res);    
+        }
+      } else {
+        alert( '検索結果が見つかりませんでした。' );
+      }
+    }
+
+    $(document).on('click', '.current_location_search', function(){
+      $("#output").empty(""); 
+      $.getJSON(url, params, function(result){
+        showResult(result);
+      });
+    });
+  };
+//駅別検索
+
+function station(lat,lon){
+  let url = 'https://api.gnavi.co.jp/RestSearchAPI/20150630/?callback=?';
+  let params = {
+      keyid: '',
+      format: 'json',
+      latitude: lat,
+      longitude: lon,
+      range: 2,
+      kids_menu: 1
+  }  
+  $.getJSON(url, params, function(result){
+    showResult(result); 
+  });
+    
+  let showResult = function(result){
+    if ( result.total_hit_count > 0 ) {
+      let res = '';
+      alert( result.total_hit_count + '件の結果が見つかりました。\n' );
+      for ( var i in result.rest ){
+          res += '<div class="textbox"><dl>';
+          res += '<dt class="result_title">'+ result.rest[i].name + ' '+ '</dt>';
+          res += '<dd class="pr">'+ result.rest[i].pr.pr_short + ' '+ '</dd>';
+          res += '<dd>'+ result.rest[i].address + ' '+ '</dd>';
+          res += '<dd>'+ result.rest[i].tel + ' '+ '</dd>';
+          res += '<dd><a href="'+ result.rest[i].url + ' '+ '" target="_blank">' + '詳細はこちら' + '</a></dd>';
+          res += '<dd>'+ result.rest[i].access.line + ' '+ result.rest[i].access.station + ' '+ result.rest[i].access.walk + '分\n'+ '</dd>';
+          res += '<dd><img src="' + result.rest[i].image_url.shop_image1 + ''+ '" alt=""></dd></div>';
+          $("#output").append(res);  
+      }
+    } else {
+      alert( '検索結果が見つかりませんでした。' );
+    }
+  }
+};
+
+$('#station').change(function(){
+  $("#output").empty(""); 
+  if($('#station option:selected').val() == 1){
+    lat = 35.690011;
+    lon = 139.700606;
+    station(lat,lon); 
+  } else if ($('#station option:selected').val() == 2){
+    lat = 35.658173;
+    lon = 139.701668;
+    station(lat,lon);  
+  } else if ($('#station option:selected').val() == 3){
+    lat = 35.647331;
+    lon = 139.709761;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 4){
+    lat = 35.684079;
+    lon = 139.702045;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 5){
+    lat = 35.670207;
+    lon = 139.702614;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 6){
+    lat = 35.633510;
+    lon = 139.715928;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 7){
+    lat = 35.626174;
+    lon = 139.723685;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 8){
+    lat = 35.619990;
+    lon = 139.728202;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 9){
+    lat = 35.628449;
+    lon = 139.738794;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 10){
+    lat = 35.645609;
+    lon = 139.747784;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 11){
+    lat = 35.655421;
+    lon = 139.757078;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 12){
+    lat = 35.666319;
+    lon = 139.758207;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 13){
+    lat = 35.674919;
+    lon =  139.762911;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 14){
+    lat = 35.681211;
+    lon = 139.766866;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 15){
+    lat = 35.691857;
+    lon = 139.770797;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 16){
+    lat = 35.698414;
+    lon = 139.772952;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 17){
+    lat = 35.707780;
+    lon = 139.774781;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 18){
+    lat = 35.712755;
+    lon = 139.776179;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 19){
+    lat = 35.721535;
+    lon = 139.778096;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 20){
+    lat = 35.728089;
+    lon = 139.770749;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 21){
+    lat = 35.732071;
+    lon = 139.766689;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 22){
+    lat = 35.738153;
+    lon = 139.760867;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 23){
+    lat = 35.736544;
+    lon = 139.746908;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 24){
+    lat = 35.733431;
+    lon = 139.739400;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 25){
+    lat = 35.731768;
+    lon = 139.728274;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 26){
+    lat = 35.729521;
+    lon = 139.710801;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 27){
+    lat = 35.721203;
+    lon = 139.706637;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 28){
+    lat = 35.713433;
+    lon = 139.704085;
+    station(lat,lon);  
+  }else if ($('#station option:selected').val() == 29){
+    lat = 35.701287;
+    lon = 139.700261;
+    station(lat,lon);  
+  }
+});
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap"
+    async defer></script>
+</body>
+</html>
